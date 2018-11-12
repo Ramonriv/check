@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+ <html>
+  <style type="text/css">
+body {
+   background-image: url("https://ramonriv.github.io/check/check.jpg");
+    background-repeat: no-repeat;
+    background-size: 102%, 200%;
+}
+
+#date {
+	position: relative;
+	top: 123px;
+    left: 920px;
+	width: 210px;
+   	height: 25px;
+   	font-size: 24px;
+
+}
+#nombre {
+	position: relative;
+	top: 215px;
+    left: 20px;
+   	width: 745px;
+   	height: 25px;
+   	font-size: 24px;
+}
+
+#demo {
+	position: relative;
+	top: 220px;
+   	left: 107px;
+   	width: 220px;
+   	height: 25px;
+   	font-size: 24px;
+}
+
+#p01{
+	position: relative;
+	top: 160px;    	
+	left: 200px;
+}
+
+#para {
+	position: relative;
+	top: 265px;
+   	left: 180px;
+   	width: 345px;
+   	height: 25px;
+    font-size: 24px;
+}
+
+#image {
+	position: relative;
+	top: 350px;
+    left: 50px;
+}
+
+#submit {
+	position: relative;
+	top: 410px;
+    left: -100px;
+	width: 100px;
+    height: 50px;
+    font-size: 24px;
+}
+
+#dollartext {
+	position: relative;
+	top: 125px;
+	left: 55px;
+	width: 900px;
+	height: 25px;
+	font-size: 24px;
+}
+#myCanvas {
+	position: relative;
+	top: 305px;
+    left: 300px;
+	border: 1px solid #d3d3d3;
+	height: 120px;
+	width:630px;
+}
+
+</style>
+
+<body>
+
+<p id="body"></p>
+
+
+<form name="myform" style="background:url(path/to/your/form/image/jpg);" method="post" action="formdata()">
+
+	<input type="date" name="date" id="date" required>
+
+	<input name="nombre" type="text" id="nombre" placeholder="Name" onKeyDown="limitText2(this.form.limitedtextfield,this.form.countdown,50);" 
+onKeyUp="limitText(this.form.limitedtextfield,this.form.countdown,50);" maxlength="50" onkeypress="return onlyAlphabets(event,this);" required />
+	
+    <input type="text" class="textfield" value="$0.00" placeholder="Dollar ammount" id="demo" name="dollar" onkeypress="return isNumber(event)" required />
+	
+	<input name="for" type="text" id="para" placeholder="For" onKeyDown="limitText2(this.form.limitedtextfield,this.form.countdown,15);" 
+onKeyUp="limitText(this.form.limitedtextfield,this.form.countdown,15);" maxlength="15" onkeypress="return onlyAlphabets(event,this);" required />
+
+
+<canvas id="myCanvas"></canvas>
+	<input type="file" id="image" name="signature" accept="image/png" required />
+
+	<input type="submit" value="Submit" id="submit" required onclick="formdata()" />
+
+	<input name="dollartext" placeholder="Dollar amount in text" type="text" id="dollartext" onKeyDown="limitText2(this.form.limitedtextfield,this.form.countdown,50);" 
+onKeyUp="limitText(this.form.limitedtextfield,this.form.countdown,50);" maxlength="50" onkeypress="return onlyAlphabets(event,this);" required />
+
+  </form>
+
+
+   <script language="javascript" type="text/javascript">
+
+/*solo alfabeto*/
+function onlyAlphabets(e, t) {
+            try {
+                if (window.event) {
+                    var charCode = window.event.keyCode;
+                }
+                else if (e) {
+                    var charCode = e.which;
+                }
+                else { return true; }
+                if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || (charCode > 7 && charCode < 40))
+                    return true;
+                else
+                    return false;
+            }
+            catch (err) {
+                alert(err.Description);
+            }
+        }
+
+		/*errores espacios en blanco */
+function myFunction() {
+    var message, x,flag=0,text="";
+    message = document.getElementById("p01");
+    message.innerHTML = "";
+    x = document.getElementById("date").value;
+    y = document.getElementById("nombre").value;
+    z = document.getElementById("demo").value;     
+    e = document.getElementById("para").value;
+    w = document.getElementById("image").value;
+    i = document.getElementById("dollartext").value;
+         
+    try { 
+        if(x == "")  throw "The date is empty";
+		 if(y == "")  throw "The name is empty";
+		  if(z == "")  throw "The money is empty";
+		   if(e == "")  throw "For is empty";
+		    if(w == "")  throw "The signature is empty";
+			 if(i == "")  throw "The money in text is empty";
+			  if(x,y,z,e,w,i == "")  throw "All of the textbox are empty";
+        
+    }
+    catch(err) {
+    text= String(err);
+        message.innerHTML = text.fontcolor("red");
+        flag=1;
+    }
+    finally {
+        document.getElementById("demo").value = "";
+        if (flag==0)
+         document.getElementById("p01").innerHTML = "OK".fontcolor("green");
+    }
+}
+
+/*solo numeros*/
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+/*limite de texto*/
+function limitText2(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
+
+/*insertar imagen*/
+var imageLoader = document.getElementById('image');
+    imageLoader.addEventListener('change', handleImage, false);
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+
+
+function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+        var img = new Image();
+        img.onload = function(){
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img,0,0);
+        }
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);     
+}
+
+function formdata() 
+{
+var date= document.getElementById("date").value;
+var nombre= document.getElementById("nombre").value;
+var demo= document.getElementById("demo").value;
+var para= document.getElementById("para").value;
+var image= document.getElementById("image").value;
+var dollartext= document.getElementById("dollartext").value;
+
+document.writeln("<h1 id=nombre>Confirmation Page</h1><br>");
+document.writeln("Thank you for completing this form.<br><br>");
+document.writeln("The date you entered was " + date + "<br>");
+document.writeln("The name you entered was " + nombre + "<br>");
+document.writeln("The ammount of money you entered was " + demo + "<br>");
+document.writeln("The ammount of money you entered in text was " + dollartext + "<br>");
+document.writeln("The person who the money is for is " + para + "<br>");
+document.writeln("Your signature " + image);
+}
+ 
+   </script>
+  </body>
+ </html>
